@@ -21,7 +21,7 @@ pipeline {
     }
 post {
         always {
-            echo 'Will always run, irrespective of success or failure'
+            echo 'Post Always: Will always run, irrespective of success or failure'
         }
     }
 }
