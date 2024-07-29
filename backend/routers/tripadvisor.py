@@ -1,9 +1,5 @@
-from typing import Tuple, List, Optional
-
+import os
 from fastapi import APIRouter, Request, Body, status, HTTPException
-from fastapi.encoders import jsonable_encoder
-from fastapi.responses import JSONResponse
-
 import requests
 import logging
 
@@ -77,7 +73,7 @@ async def get_comments(
 def trouver_etablissement_sur_tripadvisor(nom_etablissement, latitude, longitude):
 
     # Clé API de TripAdvisor
-    API_KEY = "C4E145625AD24697BD2C133DF499D190"
+    API_KEY = os.getenv('TRIPADVISOR_API_KEY')
 
     # URL de l'API de TripAdvisor pour la recherche d'établissements
     search_url = "https://api.content.tripadvisor.com/api/v1/location/search"
