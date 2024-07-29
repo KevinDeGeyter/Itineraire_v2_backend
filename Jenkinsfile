@@ -23,7 +23,7 @@ pipeline {
             }
             steps {
                 echo 'Deploying the application.'
-                sh 'sshpass -p od1235jenkins ssh jenkins@${DEPLOYMENT_SERVER_HOST} "docker login -u ${USER_REGISTRY} -p ${USER_PASSWORD_REGISTRY} && docker pull ${IMAGE_NAME}:1.1.3 && docker run -p 80:8050 -d axamak/itineraire-test-img:1.1.3"'
+                sh 'sshpass -p od1235jenkins ssh jenkins@${DEPLOYMENT_SERVER_HOST} "docker login -u ${USER_REGISTRY} -p ${USER_PASSWORD_REGISTRY} && docker pull ${IMAGE_NAME}:1.1.3 && docker stop $(docker ps -q) && docker run -p 80:8050 -d axamak/itineraire-test-img:1.1.3"'
             }
         }
     }
