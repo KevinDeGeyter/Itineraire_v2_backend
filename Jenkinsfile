@@ -6,7 +6,6 @@ pipeline {
                 echo 'Building the project.'
                 sh 'whoami'
                 sh 'pwd'
-                sh 'ls -al'
                 sh 'docker ps'
                 sh 'docker login -u ${USER_REGISTRY} -p ${USER_PASSWORD_REGISTRY}'
                 sh 'docker build -t ${IMAGE_NAME}:${IMAGE_TAG} .'
@@ -18,7 +17,7 @@ pipeline {
                 echo 'Running tests.'
             }
         }
-        stage('Deploy') {
+        stage('Deploy to Staging') {
             steps {
                 echo 'Deploying the application.'
             }
