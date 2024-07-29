@@ -20,9 +20,7 @@ pipeline {
         stage('Deploy to Staging') {
             steps {
                 echo 'Deploying the application.'
-                echo 'Val WHO=$(whoami)'
-
-
+                sh 'ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} jenkins@${DEPLOYMENT_SERVER_HOST} "docker login -u ${USER_REGISTRY} -p ${USER_PASSWORD_REGISTRY} && docker pull ${IMAGE_NAME}:latest && docker run  ${IMAGE_NAME}:latest -d"'
             }
         }
     }
