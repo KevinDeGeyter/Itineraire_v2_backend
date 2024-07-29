@@ -29,9 +29,4 @@ pipeline {
             }
         }
     }
-post {
-        always {
-            echo 'Post Always AZERTY Ddddd: Will always run, irrespective of success or failure'
-        }
-    }
 }
