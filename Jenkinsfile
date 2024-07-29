@@ -4,6 +4,7 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'Building the project.'
+                sh 'whoami'
                 sh 'pwd'
                 sh 'ls -al'
                 sh 'docker ps'
