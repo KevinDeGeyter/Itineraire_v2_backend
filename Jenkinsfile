@@ -26,7 +26,7 @@ pipeline {
     }
 post {
         always {
-            echo 'Post Always AZERTY aaaa: Will always run, irrespective of success or failure'
+            echo 'Post Always AZERTY bbbb: Will always run, irrespective of success or failure'
         }
     }
 }
