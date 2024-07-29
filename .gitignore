@@ -1,3 +1,7 @@
 .idea
 .streamlit
+virtualEnv
+.dockerignore
 .env
+.env-dev
+.env-prod
