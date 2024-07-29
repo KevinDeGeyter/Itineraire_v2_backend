@@ -9,6 +9,8 @@ pipeline {
                 sh 'ls -al'
                 sh 'docker ps'
                 sh 'docker login -u ${USER_REGISTRY} -p ${USER_PASSWORD_REGISTRY}'
+                sh 'docker build -t ${IMAGE_NAME}:${IMAGE_TAG} .'
+                sh 'docker push ${IMAGE_NAME}:${IMAGE_TAG}'
                 }
             }
         stage('Test') {
