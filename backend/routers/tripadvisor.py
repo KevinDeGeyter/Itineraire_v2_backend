@@ -14,7 +14,7 @@ router = APIRouter()
 
 @router.get("/", response_description="TripAdvisor")
 async def hello():
-    return {"data":"Hello TripAdvisor AZERTY"}
+    return {"data":"Hello TripAdvisor"}
 
 @router.get("/tripadvisor", response_description="TripAdvisor")
 async def hello_tripadvisor():
