@@ -1,8 +1,8 @@
 services:
   app:
-    image: axamak/itineraire-test-img:1.1.3
+    image: ${DC_IMAGE_NAME}:${DC_IMAGE_TAG}
     ports:
-      - 8501:8501
+      - ${DC_APP_PORT}:${DC_APP_PORT}
     networks:
       - my_network_from_compose
 
