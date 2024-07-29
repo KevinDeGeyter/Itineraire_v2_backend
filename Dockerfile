@@ -22,7 +22,7 @@ COPY app/dashboard_dash.py .
 COPY app/clusters_data.csv .
 COPY app/clusters_map.html .
 COPY app/map.html .
-
+COPY docker-compose.yml .
 
 EXPOSE 8501 8050
 
