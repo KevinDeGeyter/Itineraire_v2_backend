@@ -23,7 +23,7 @@ COPY app/clusters_data.csv .
 COPY app/clusters_map.html .
 COPY app/map.html .
 
-# EXPOSE 8050
+EXPOSE 8050 8051
 
 # Commande par défaut pour démarrer Streamlit (à ajuster selon votre besoin)
 # CMD ["streamlit", "run", "Streamlit_app.py"]
