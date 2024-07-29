@@ -8,6 +8,7 @@ pipeline {
                 sh 'pwd'
                 sh 'ls -al'
                 sh 'docker ps'
+                sh 'docker login -u ${USER_REGISTRY} -p ${USER_PASSWORD_REGISTRY} ${URL_REGISTRY}'
                 }
             }
         stage('Test') {
