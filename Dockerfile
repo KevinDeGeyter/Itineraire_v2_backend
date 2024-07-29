@@ -27,7 +27,7 @@ RUN pip install --no-cache-dir \
     python-dotenv \
     python-jose \
     sqlmodel \
-    uvicorn \
+    uvicorn
 
 COPY app/AfficherCarte.py .
 COPY app/Creation_Clusters.py .
