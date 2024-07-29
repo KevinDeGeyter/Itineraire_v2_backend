@@ -18,9 +18,12 @@ pipeline {
             }
         }
         stage('Deploy to Staging') {
+            environment {
+                SECRET_FILE = credentials('SSH_PRIVATE_KEY')
+            }
             steps {
                 echo 'Deploying the application.'
-                sh 'ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} jenkins@${DEPLOYMENT_SERVER_HOST} "docker login -u ${USER_REGISTRY} -p ${USER_PASSWORD_REGISTRY} && docker pull ${IMAGE_NAME}:latest && docker run  ${IMAGE_NAME}:latest -d"'
+                sh 'ssh -o StrictHostKeyChecking=no -i ${SECRET_FILE} jenkins@${DEPLOYMENT_SERVER_HOST} "docker login -u ${USER_REGISTRY} -p ${USER_PASSWORD_REGISTRY} && docker pull ${IMAGE_NAME}:latest && docker run  ${IMAGE_NAME}:latest -d"'
             }
         }
     }
