@@ -27,4 +27,5 @@ COPY app/map.html .
 EXPOSE 8501 8050
 
 # Commande par défaut pour démarrer Streamlit (à ajuster selon votre besoin)
-CMD ["streamlit", "run", "Streamlit_app.py"]
+# CMD ["streamlit", "run", "Streamlit_app.py"]
+ENTRYPOINT ["streamlit", "run", "Streamlit_app.py"]
