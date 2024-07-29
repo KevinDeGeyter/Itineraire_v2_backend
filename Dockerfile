@@ -22,10 +22,9 @@ COPY app/dashboard_dash.py .
 COPY app/clusters_data.csv .
 COPY app/clusters_map.html .
 COPY app/map.html .
-COPY docker-compose.yml .
 
-EXPOSE 8050
+# EXPOSE 8050
 
 # Commande par défaut pour démarrer Streamlit (à ajuster selon votre besoin)
 # CMD ["streamlit", "run", "Streamlit_app.py"]
-ENTRYPOINT ["streamlit", "run", "Streamlit_app.py"]
+# ENTRYPOINT ["streamlit", "run", "Streamlit_app.py"]
