@@ -20,6 +20,9 @@ pipeline {
         stage('Deploy to Staging') {
             steps {
                 echo 'Deploying the application.'
+                echo 'Val WHO=$(whoami)'
+
+
             }
         }
     }
