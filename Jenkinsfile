@@ -3,9 +3,10 @@ pipeline {
     stages {
         stage('Build') {
             steps {
+                echo 'Building the project.'
                 sh 'pwd'
                 sh 'ls -al'
-                echo 'Building the project.'
+                sh 'docker ps'
                 }
             }
         stage('Test') {
