@@ -1,4 +1,4 @@
-version: "3.3"
+version: "3.9"
 services:
   app:
     image: axamak/itineraire-test-img:1.1.3
@@ -8,6 +8,4 @@ services:
       - my_network_from_compose
 
 networks:
-  micro_service:
-    external:
-      name: my_network_from_compose
+  my_network_from_compose:
