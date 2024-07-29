@@ -113,7 +113,7 @@ def trouver_etablissement_sur_tripadvisor(nom_etablissement, latitude, longitude
 
 def recuperer_avis_etablissement(location_id):
     # Clé API de TripAdvisor
-    API_KEY = "C4E145625AD24697BD2C133DF499D190"
+    API_KEY = os.getenv('TRIPADVISOR_API_KEY')
 
     # URL de l'API de TripAdvisor pour récupérer les avis de l'établissement
     reviews_url = f"https://api.content.tripadvisor.com/api/v1/location/{location_id}/reviews"
