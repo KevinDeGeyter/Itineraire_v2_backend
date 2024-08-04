@@ -76,7 +76,6 @@ async def get_comments(
 def trouver_etablissement_sur_tripadvisor(nom_etablissement, latitude, longitude):
     # Clé API de TripAdvisor
     API_KEY = os.getenv('TRIPADVISOR_API_KEY')
-
     logger.debug('==============API_KEY: %s', API_KEY)
 
     # URL de l'API de TripAdvisor pour la recherche d'établissements
