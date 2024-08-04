@@ -7,7 +7,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 script {
-                    echo "////////////Checking out branch: ${REF_GIT}"
+                    echo "////////////Checking out branch: ${REF_GIT}////////////////"
                     checkout([$class: 'GitSCM',
                         branches: [[name: "${REF_GIT}"]],
                         doGenerateSubmoduleConfigurations: false,
@@ -20,7 +20,7 @@ pipeline {
         }
         stage('Build') {
             steps {
-                echo '//////////////////Building the project.'
+                echo '//////////////////Building the project.//////////////////////'
                 sh 'whoami'
                 sh 'pwd'
                 sh 'docker ps'
