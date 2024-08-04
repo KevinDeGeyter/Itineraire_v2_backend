@@ -43,6 +43,7 @@ RUN mkdir -p backend/routers
 COPY backend/main.py backend
 COPY backend/routers/__init__.py backend/routers
 COPY backend/routers/tripadvisor.py backend/routers
+COPY backend/routers/datatourisme.py backend/routers
 
 # EXPOSE 8050 8051
 # Commande par défaut pour démarrer Streamlit (à ajuster selon votre besoin)
