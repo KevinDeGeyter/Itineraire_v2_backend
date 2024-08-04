@@ -31,7 +31,7 @@ async def startup_event():
 async def shutdown_event():
     logger.debug('This is a debug message from shutdown_event')
 
-app.include_router(tripadvisor_router, prefix="/api", tags=["api"])
+app.include_router(tripadvisor_router, prefix="/tripadvisor", tags=["api"])
 
 if __name__ == "__main__":
     uvicorn.run("main:app", host="0.0.0.0", port=8080, reload=True)
