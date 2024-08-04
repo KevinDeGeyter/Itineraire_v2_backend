@@ -6,24 +6,26 @@ import logging
 logger = logging.getLogger('uvicorn.error')
 logger.setLevel(logging.DEBUG)
 
-router = APIRouter()
+routerTripAdvisor = APIRouter()
 
-@router.get("/", response_description="TripAdvisor")
+
+@routerTripAdvisor.get("/", response_description="TripAdvisor")
 async def hello():
-    return {"data":"Hello TripAdvisor"}
+    return {"data": "Hello TripAdvisor"}
 
-@router.get("/tripadvisor", response_description="TripAdvisor")
+
+@routerTripAdvisor.get("/hello", response_description="TripAdvisor")
 async def hello_tripadvisor():
-    return {"data":"Hello TripAdvisor"}
+    return {"data": "Hello TripAdvisor again"}
 
-@router.get("/tripadvisor/comments/{entity}/{lat}/{lng}", response_description="TripAdvisor")
+
+@routerTripAdvisor.get("/comments/{entity}/{lat}/{lng}", response_description="TripAdvisor")
 async def get_comments(
         request: Request,
         entity: str = "123455",
         lat: str = "48.866667",
         lng: str = "2.333333",
-        ):
-
+):
     logger.debug('This is a debug message from get_comments')
 
     logger.debug('==============Entity: %s', entity)
@@ -70,8 +72,8 @@ async def get_comments(
 
     return response
 
-def trouver_etablissement_sur_tripadvisor(nom_etablissement, latitude, longitude):
 
+def trouver_etablissement_sur_tripadvisor(nom_etablissement, latitude, longitude):
     # Clé API de TripAdvisor
     API_KEY = os.getenv('TRIPADVISOR_API_KEY')
 
@@ -110,6 +112,7 @@ def trouver_etablissement_sur_tripadvisor(nom_etablissement, latitude, longitude
         # Affiche un message d'erreur en cas d'exception
         logger.debug("Erreur : %s", ex)
         return {"status": "ERROR", "data": ex}
+
 
 def recuperer_avis_etablissement(location_id):
     # Clé API de TripAdvisor

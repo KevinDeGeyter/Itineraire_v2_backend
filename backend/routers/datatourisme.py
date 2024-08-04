@@ -6,10 +6,9 @@ import logging
 logger = logging.getLogger('uvicorn.error')
 logger.setLevel(logging.DEBUG)
 
-router = APIRouter()
+routerDataTourisme = APIRouter()
 
-@router.get("/", response_description="Data Tourisme")
+
+@routerDataTourisme.get("/", response_description="Data Tourisme")
 async def hello():
-    return {"data":"Hello Data Tourisme"}
-
-
+    return {"data": "Hello Data Tourisme"}
