@@ -1,9 +1,21 @@
 pipeline {
     agent any
     stages {
-        stage('Repo Checkout') {
+        stage('Checkout') {
             steps {
-            git url: 'https://github.com/KevinDeGeyter/Itineraire_v2_backend.git', branch: '${REF_GIT}'
+            checkout(
+                  [
+                    $class: 'GitSCM',
+                    extensions: [[$class: 'RelativeTargetDirectory', relativeTargetDir: 'myrepo']],
+                    branches: [[name: 'refs/heads/${REF_GIT}']],
+                    userRemoteConfigs: [
+                      [
+                        url: 'https://github.com/KevinDeGeyter/Itineraire_v2_backend.git',
+                        name: 'origin'
+                      ]
+                    ]
+                  ]
+                )
             }
         }
         stage('Build') {
