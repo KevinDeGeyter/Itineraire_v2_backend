@@ -1,6 +1,11 @@
 pipeline {
     agent any
     stages {
+        stage('Repo Checkout') {
+            steps {
+            git url: 'https://github.com/KevinDeGeyter/Itineraire_v2_backend.git', branch: '${REF_GIT}'
+            }
+        }
         stage('Build') {
             steps {
                 echo 'Building the project.'
