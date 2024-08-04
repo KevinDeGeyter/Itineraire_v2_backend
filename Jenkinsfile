@@ -1,21 +1,21 @@
 pipeline {
     agent any
+    environment {
+        REPO_URL = 'https://github.com/KevinDeGeyter/Itineraire_v2_backend.git' // replace with your repository URL
+    }
     stages {
         stage('Checkout') {
             steps {
-            checkout(
-                  [
-                    $class: 'GitSCM',
-                    extensions: [[$class: 'RelativeTargetDirectory', relativeTargetDir: 'myrepo']],
-                    branches: [[name: 'refs/heads/${REF_GIT}']],
-                    userRemoteConfigs: [
-                      [
-                        url: 'https://github.com/KevinDeGeyter/Itineraire_v2_backend.git',
-                        name: 'origin'
-                      ]
-                    ]
-                  ]
-                )
+                script {
+                    echo "Checking out branch: ${REF_GIT}"
+                    checkout([$class: 'GitSCM',
+                        branches: [[name: "${REF_GIT}"]],
+                        doGenerateSubmoduleConfigurations: false,
+                        extensions: [],
+                        submoduleCfg: [],
+                        userRemoteConfigs: [[url: "${env.REPO_URL}"]]
+                    ])
+                }
             }
         }
         stage('Build') {
