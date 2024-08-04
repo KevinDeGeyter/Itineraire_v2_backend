@@ -17,6 +17,8 @@ services:
 
   backend:
     image: ${DC_IMAGE_NAME}:${DC_IMAGE_TAG}
+    environment:
+      - TRIPADVISOR_API_KEY
     ports:
       - ${DC_BACKEND_PORT}:${DC_BACKEND_PORT}
     command: python3 backend/main.py
