@@ -1,8 +1,5 @@
 pipeline {
     agent any
-    environment {
-        REPO_URL = 'https://github.com/KevinDeGeyter/Itineraire_v2_backend.git' // replace with your repository URL
-    }
     stages {
         stage('Build') {
             steps {
