@@ -18,10 +18,10 @@ async def hello():
 
 @routerDataTourisme.post("/graphe", response_description="Data Tourisme")
 async def create_graph(data: dict = Body(...)):
-    # await asyncio.sleep(30)
+    await asyncio.sleep(30)
     return {
         "latitude": data.latitude,
-        "longitude": "data.longitude",
-        "poi_types": "data.poi_types",
-        "radius": "data.radius"
+        "longitude": data.longitude,
+        "poi_types": data.poi_types,
+        "radius": data.radius
     }
