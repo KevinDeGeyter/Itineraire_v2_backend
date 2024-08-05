@@ -174,7 +174,7 @@ async def main():
             # result = execute_query(latitude, longitude, poi_types, radius)
             result = await async_post_request(url, data, headers)
 
-            if result == True:
+            if result.status == "OK":
                 st.success("La requête a été exécutée avec succès !")
                 # Affichage du résultat de la carte et du tableau CSV si disponible
                 st.markdown("## Résultat de la carte")
@@ -275,5 +275,17 @@ async def main():
             st.error("Erreur lors de la récupération de l'itinéraire.")
 
 
+# Fonction pour gérer l'exécution asynchrone dans Streamlit
+def run_asyncio_task():
+    loop = asyncio.get_event_loop()
+    if loop.is_running():
+        # Si la boucle est déjà en cours d'exécution, utilisez create_task
+        task = loop.create_task(main())
+        loop.run_until_complete(task)
+        return task.result()
+    else:
+        return asyncio.run(main())
+
+
 if __name__ == "__main__":
-    await main()
+    run_asyncio_task()

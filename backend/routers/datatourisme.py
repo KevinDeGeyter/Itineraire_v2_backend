@@ -123,4 +123,4 @@ async def create_graph_neo4j(data: dict = Body(...)):
     cursor.close()
     conn.close()
 
-    return {"received_data": data}
+    return {"status": "OK", "data": data}
