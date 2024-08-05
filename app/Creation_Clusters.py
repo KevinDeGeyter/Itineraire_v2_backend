@@ -16,39 +16,6 @@ parser.add_argument('--poi_types', nargs='+', required=True, help='Types d_activ
 parser.add_argument('--radius', type=float, required=True, help='Rayon en kilomètres pour filtrer les points d_intérêt')
 args = parser.parse_args()
 
-# URL de l'API
-url = 'http://64.226.69.58:8080/data/graphe'
-
-# Données à envoyer dans la requête POST
-data = {
-    'latitude': args.latitude,
-    'longitude': args.longitude,
-    'poi_types': args.poi_types,
-    'radius': args.radius
-}
-
-# En-têtes de la requête (optionnels)
-headers = {
-    'Content-Type': 'application/json',
-    'Authorization': 'Bearer your_token'
-}
-
-
-def post_request(urll, dataa, headerss=None):
-    responsee = requests.post(urll, json=dataa, headers=headerss)
-    return responsee.json()
-
-
-response = await asyncio.to_thread(post_request, url, data, headers)
-
-# Vérifiez la réponse
-if response.status_code == 200:
-    print('Requête réussie')
-    print('Réponse:', response.json())
-else:
-    print('Erreur:', response.status_code)
-    print('Message:', response.text)
-
 # Exécuter la fonction asynchrone
 # asyncio.run(post_request())
 

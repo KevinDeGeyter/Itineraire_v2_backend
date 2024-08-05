@@ -6,6 +6,7 @@ from geopy.distance import geodesic
 import subprocess
 import asyncio
 
+
 # Fonction pour appeler l'API OpenRouteService
 def call_openrouteservice(coordinates, profile):
     url = f'https://api.openrouteservice.org/v2/directions/{profile}/geojson'
@@ -18,7 +19,7 @@ def call_openrouteservice(coordinates, profile):
         "coordinates": coordinates
     }
     response = requests.post(url, json=body, headers=headers)
-    
+
     if response.status_code == 200:
         return response.json()
     else:
@@ -26,22 +27,26 @@ def call_openrouteservice(coordinates, profile):
             error_message = response.json()['error']['message']
         except Exception as e:
             error_message = f"Erreur non spécifiée : {str(e)}"
-            
+
         st.error(f"Erreur lors de l'appel à l'API OpenRouteService : {response.status_code}, {error_message}")
         return None
+
 
 def load_data():
     df = pd.read_csv('clusters_data.csv')
     return df
 
+
 # Fonction pour calculer la distance entre deux points (en kilomètres)
 def calculate_distance(point1, point2):
     return geodesic(point1, point2).kilometers
+
 
 # Définition des paramètres par défaut
 default_address = "Paris, France"
 default_poi_types = ["Monument"]
 default_radius = 50
+
 
 # Fonction pour récupérer la latitude et la longitude à partir de l'adresse via api-adresse.data.gouv.fr
 async def geocode(address):
@@ -49,9 +54,9 @@ async def geocode(address):
     params = {
         'q': address
     }
-    
+
     response = await asyncio.to_thread(requests.get, url, params=params)
-    
+
     if response.status_code == 200:
         data = response.json()
         if len(data['features']) > 0:
@@ -64,6 +69,7 @@ async def geocode(address):
     else:
         st.error(f"Erreur lors de la récupération des coordonnées pour '{address}' : {response}")
         return None
+
 
 # Fonction pour exécuter la requête et récupérer les résultats
 def execute_query(latitude, longitude, poi_types, radius):
@@ -80,6 +86,18 @@ def execute_query(latitude, longitude, poi_types, radius):
     else:
         st.success('Error')
         return False, stderr.decode('utf-8')
+
+
+def post_request(url, data, headers=None):
+    response = requests.post(url, json=data, headers=headers)
+    return response.json()
+
+
+# Fonction asynchrone pour exécuter la requête POST dans un thread séparé
+async def async_post_request(url, data, headers=None):
+    loop = asyncio.get_running_loop()
+    response = await asyncio.to_thread(post_request, url, data, headers)
+    return response
 
 
 # Fonction principale de l'application Streamlit
@@ -101,26 +119,56 @@ def main():
         longitude = None
 
     radius = st.text_input("Choisissez une distance maximale :", default_radius)
-    
+
     # Sélection des types de points d'intérêt (POI)
     extended_poi_types = [
-        "Culture", "Religion", "Sport", "Loisir", "Divertissement", "Hebergement", 
-        "Restauration", "Boisson", "Banque", "Hebergement", "Autre", "Plage", 
-        "Mobilité réduite", "Moyen de locomotion", "Montagne", "Antiquité", 
-        "Histoire", "Musée", "Détente", "Bar", "Commerce local", "Point de vue", 
-        "Nature", "Camping", "Cours d'eau", "Service", "Monument", "Jeunesse", 
-        "Apprentissage", "Marché", "Vélo", "Magasin", "Animaux", "Location", 
-        "Parcours", "Santé", "Information", "Militaire", "Parking", 
+        "Culture", "Religion", "Sport", "Loisir", "Divertissement", "Hebergement",
+        "Restauration", "Boisson", "Banque", "Hebergement", "Autre", "Plage",
+        "Mobilité réduite", "Moyen de locomotion", "Montagne", "Antiquité",
+        "Histoire", "Musée", "Détente", "Bar", "Commerce local", "Point de vue",
+        "Nature", "Camping", "Cours d'eau", "Service", "Monument", "Jeunesse",
+        "Apprentissage", "Marché", "Vélo", "Magasin", "Animaux", "Location",
+        "Parcours", "Santé", "Information", "Militaire", "Parking",
         "Marche à pied", "POI", "Piscine"
     ]
 
     poi_types = st.multiselect("Types de points d'intérêt :", extended_poi_types, default=default_poi_types)
 
+    # ########################
+    # URL de l'API
+    url = 'http://64.226.69.58:8080/data/graphe'
+
+    # Données à envoyer dans la requête POST
+    data = {
+        'latitude': latitude,
+        'longitude': longitude,
+        'poi_types': poi_types,
+        'radius': radius
+    }
+
+    # En-têtes de la requête (optionnels)
+    headers = {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer your_token'
+    }
+
+    response = await async_post_request(url, data, headers)
+    print("Réponse de l'API:", response)
+
+    # Vérifiez la réponse
+    if response.status_code == 200:
+        print('Requête réussie')
+        print('Réponse:', response.json())
+    else:
+        print('Erreur:', response.status_code)
+        print('Message:', response.text)
+    # ###############################
+
     # Bouton pour exécuter la requête
     if st.button("Exécuter la requête"):
         if coordinates:
             result = execute_query(latitude, longitude, poi_types, radius)
-            
+
             if result == True:
                 st.success("La requête a été exécutée avec succès !")
                 # Affichage du résultat de la carte et du tableau CSV si disponible
@@ -128,7 +176,7 @@ def main():
                 with open("clusters_map.html", "r", encoding="utf-8") as file:
                     html_code = file.read()
                     st.components.v1.html(html_code, width=800, height=600)
-                
+
                 st.markdown("## Données des établissements")
                 try:
                     df = pd.read_csv("clusters_data.csv")
@@ -190,7 +238,7 @@ def main():
                 route_coordinates = []
                 for coord in response['features'][0]['geometry']['coordinates']:
                     route_coordinates.append(list(reversed(coord)))
-                
+
                 # Ajouter la ligne de l'itinéraire à la carte
                 folium.PolyLine(locations=route_coordinates, color='blue', weight=5).add_to(m)
 
@@ -206,12 +254,12 @@ def main():
                         'À': filtered_data.iloc[i + 1]['label_fr'],
                         'Distance (km)': distance
                     })
-                
+
                 st.dataframe(pd.DataFrame(distances))
 
                 # Convertir la carte Folium en HTML
                 m.save('map.html')
-                
+
                 # Afficher la carte dans Streamlit à l'aide de l'iframe
                 with open('map.html', 'r', encoding='utf-8') as f:
                     html_map = f.read()
@@ -220,6 +268,7 @@ def main():
                 st.warning("Aucun itinéraire trouvé.")
         else:
             st.error("Erreur lors de la récupération de l'itinéraire.")
+
 
 if __name__ == "__main__":
     main()
