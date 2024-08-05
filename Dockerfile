@@ -14,7 +14,6 @@ RUN pip install --no-cache-dir \
     dash \
     plotly \
     asyncio \
-    nest_asyncio \
     fastapi \
     bcrypt \
     beanie \
