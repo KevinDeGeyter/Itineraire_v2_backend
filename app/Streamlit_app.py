@@ -88,17 +88,6 @@ def execute_query(latitude, longitude, poi_types, radius):
         return False, stderr.decode('utf-8')
 
 
-def post_request(url, data, headers=None):
-    response = requests.post(url, json=data, headers=headers)
-    return response.json()
-
-
-# Fonction asynchrone pour exécuter la requête POST dans un thread séparé
-async def async_post_request(url, data, headers=None):
-    response = await asyncio.to_thread(requests.post, url, json=data, headers=headers)
-    return response
-
-
 # Fonction principale de l'application Streamlit
 def main():
     st.title("Projet Itineraire Data Engineer")
@@ -132,7 +121,6 @@ def main():
     ]
 
     poi_types = st.multiselect("Types de points d'intérêt :", extended_poi_types, default=default_poi_types)
-
 
     # Bouton pour exécuter la requête
     if st.button("Exécuter la requête"):
