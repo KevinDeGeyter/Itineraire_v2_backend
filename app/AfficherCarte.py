@@ -8,6 +8,7 @@ username = "neo4j"
 password = "od1235Azerty%"
 driver = GraphDatabase.driver(uri, auth=(username, password))
 
+
 # Fonction pour récupérer les coordonnées GPS et les labels des POIs de chaque cluster depuis Neo4j
 def get_clusters_poi_data(min_poi_count=6, max_clusters=10, max_pois_per_cluster=10):
     clusters_data = {}
@@ -30,6 +31,7 @@ def get_clusters_poi_data(min_poi_count=6, max_clusters=10, max_pois_per_cluster
             poi_data = record["poi_data"][:max_pois_per_cluster]  # Limiter les POI par cluster
             clusters_data[cluster_name] = poi_data
     return clusters_data
+
 
 # Récupérer les données des POIs pour les clusters avec au moins 6 POI et au maximum 10 clusters
 clusters_data = get_clusters_poi_data(min_poi_count=6, max_clusters=10, max_pois_per_cluster=10)
