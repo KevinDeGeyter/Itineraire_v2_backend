@@ -15,12 +15,3 @@ routerDataTourisme = APIRouter()
 async def hello():
     return {"data": "Hello Data Tourisme"}
 
-@routerDataTourisme.post("/graphe", response_description="Data Tourisme")
-async def create_graph(data: Body(...)):
-    await asyncio.sleep(30)
-    return {
-        "latitude": data.latitude,
-        "longitude": data.longitude,
-        "poi_types": data.poi_types,
-        "radius": data.radius
-    }
