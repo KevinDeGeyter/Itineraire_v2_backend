@@ -120,7 +120,7 @@ def execute_query(latitude, longitude, poi_types, radius):
 
 
 # Fonction principale de l'application Streamlit
-async def main():
+def main():
     st.title("Projet Itineraire Data Engineer")
 
     st.header("Paramètres de la requête")
@@ -174,8 +174,8 @@ async def main():
     # Bouton pour exécuter la requête
     if st.button("Exécuter la requête"):
         if coordinates:
-            # result = execute_query(latitude, longitude, poi_types, radius)
-            result = await async_post_request(url, data, headers)
+            result = execute_query(latitude, longitude, poi_types, radius)
+            # result = await async_post_request(url, data, headers)
 
             if result.status == "OK":
                 st.success("La requête a été exécutée avec succès !")
@@ -279,4 +279,4 @@ async def main():
 
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    main()
