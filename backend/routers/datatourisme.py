@@ -46,7 +46,4 @@ async def create_graph_neo4j(data: dict = Body(...)):
     received_data = {"result": data}
     logger.debug("create_graph %s", json.dumps(data, indent=4))
 
-
-
-
     return {"status": "OK", "data": data}

@@ -8,7 +8,7 @@ import asyncio
 import nest_asyncio
 
 # Appliquer nest_asyncio pour permettre l'utilisation d'asyncio.run dans un environnement avec une boucle d'événements existante
-nest_asyncio.apply()
+# nest_asyncio.apply()
 
 # Fonction synchrone pour effectuer une requête POST
 def post_request(url, data, headers=None):
