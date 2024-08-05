@@ -4,6 +4,8 @@ import subprocess
 from geopy.distance import geodesic
 from neo4j import GraphDatabase
 from sklearn.cluster import KMeans
+import httpx
+import asyncio
 
 # Définition des arguments en ligne de commande
 parser = argparse.ArgumentParser(description='Script pour créer des clusters de Points d_intérêt en fonction de la localisation et du type d_activité.')
@@ -12,6 +14,41 @@ parser.add_argument('--longitude', type=float, required=True, help='Longitude du
 parser.add_argument('--poi_types', nargs='+', required=True, help='Types d_activité')
 parser.add_argument('--radius', type=float, required=True, help='Rayon en kilomètres pour filtrer les points d_intérêt')
 args = parser.parse_args()
+
+
+async def post_request():
+    # URL de l'API
+    url = 'http://64.226.69.58:8080/data/graphe'
+
+    # Données à envoyer dans la requête POST
+    data = {
+        'latitude': args.latitude,
+        'longitude': args.longitude,
+        'poi_types': args.poi_types,
+        'radius': args.radius
+    }
+
+    # En-têtes de la requête (optionnels)
+    headers = {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer your_token'
+    }
+
+    # Créer un client asynchrone
+    async with httpx.AsyncClient() as client:
+        # Effectuer la requête PUT
+        response = await client.post(url, json=data, headers=headers)
+
+        # Vérifiez la réponse
+        if response.status_code == 200:
+            print('Requête réussie')
+            print('Réponse:', response.json())
+        else:
+            print('Erreur:', response.status_code)
+            print('Message:', response.text)
+
+# Exécuter la fonction asynchrone
+asyncio.run(post_request())
 
 # Fonction pour filtrer les points d'intérêt dans un rayon donné autour d'une position
 def filter_pois(position, pois, radius_km):
@@ -101,6 +138,8 @@ with driver.session() as session:
 # Fermeture du curseur et de la connexion à la base de données PostgreSQL
 cursor.close()
 conn.close()
+
+
 
 # Exécuter le script AfficherCarte.py pour afficher les résultats
 subprocess.run(["python3", "AfficherCarte.py"])
