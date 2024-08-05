@@ -42,8 +42,8 @@ def filter_pois(position, pois, radius_km):
 
 @routerDataTourisme.post("/graph", response_description="Data Tourisme")
 async def create_graph_neo4j(data: dict = Body(...)):
-    await asyncio.sleep(5)
-    received_data = {"result": data}
+    # await asyncio.sleep(5)
+    # received_data = {"result": data}
     logger.debug("create_graph %s", json.dumps(data, indent=4))
 
     return {"status": "OK", "data": data}
