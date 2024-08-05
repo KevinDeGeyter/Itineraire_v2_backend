@@ -95,7 +95,6 @@ def post_request(url, data, headers=None):
 
 # Fonction asynchrone pour exécuter la requête POST dans un thread séparé
 async def async_post_request(url, data, headers=None):
-    loop = asyncio.get_running_loop()
     response = await asyncio.to_thread(post_request, url, data, headers)
     return response
 
