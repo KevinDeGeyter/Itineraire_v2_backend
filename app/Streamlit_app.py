@@ -151,7 +151,7 @@ async def main():
         'Authorization': 'Bearer your_token'
     }
 
-    response = await async_post_request(url, data, headers)
+    response = asyncio.run(async_post_request(url, data, headers))
     print("Réponse de l'API:", response)
 
     # Vérifiez la réponse
@@ -270,4 +270,4 @@ async def main():
 
 
 if __name__ == "__main__":
-    await main()
+    main()
