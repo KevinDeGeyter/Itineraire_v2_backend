@@ -101,7 +101,7 @@ async def async_post_request(url, data, headers=None):
 
 
 # Fonction principale de l'application Streamlit
-def main():
+async def main():
     st.title("Projet Itineraire Data Engineer")
 
     st.header("Paramètres de la requête")
