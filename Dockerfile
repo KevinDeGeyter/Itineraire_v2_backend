@@ -18,6 +18,7 @@ RUN pip install --no-cache-dir \
     bcrypt \
     beanie \
     email-validator \
+    requests \
     httpx \
     Jinja2 \
     motor \

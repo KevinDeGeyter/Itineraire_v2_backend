@@ -4,51 +4,53 @@ import subprocess
 from geopy.distance import geodesic
 from neo4j import GraphDatabase
 from sklearn.cluster import KMeans
-import httpx
+import requests
 import asyncio
 
 # Définition des arguments en ligne de commande
-parser = argparse.ArgumentParser(description='Script pour créer des clusters de Points d_intérêt en fonction de la localisation et du type d_activité.')
+parser = argparse.ArgumentParser(
+    description='Script pour créer des clusters de Points d_intérêt en fonction de la localisation et du type d_activité.')
 parser.add_argument('--latitude', type=float, required=True, help='Latitude du point de référence')
 parser.add_argument('--longitude', type=float, required=True, help='Longitude du point de référence')
 parser.add_argument('--poi_types', nargs='+', required=True, help='Types d_activité')
 parser.add_argument('--radius', type=float, required=True, help='Rayon en kilomètres pour filtrer les points d_intérêt')
 args = parser.parse_args()
 
+# URL de l'API
+url = 'http://64.226.69.58:8080/data/graphe'
 
-async def post_request():
-    # URL de l'API
-    url = 'http://64.226.69.58:8080/data/graphe'
+# Données à envoyer dans la requête POST
+data = {
+    'latitude': args.latitude,
+    'longitude': args.longitude,
+    'poi_types': args.poi_types,
+    'radius': args.radius
+}
 
-    # Données à envoyer dans la requête POST
-    data = {
-        'latitude': args.latitude,
-        'longitude': args.longitude,
-        'poi_types': args.poi_types,
-        'radius': args.radius
-    }
+# En-têtes de la requête (optionnels)
+headers = {
+    'Content-Type': 'application/json',
+    'Authorization': 'Bearer your_token'
+}
 
-    # En-têtes de la requête (optionnels)
-    headers = {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer your_token'
-    }
 
-    # Créer un client asynchrone
-    async with httpx.AsyncClient() as client:
-        # Effectuer la requête PUT
-        response = await client.post(url, json=data, headers=headers)
+def post_request(urll, dataa, headerss=None):
+    responsee = requests.post(urll, json=dataa, headers=headerss)
+    return responsee.json()
 
-        # Vérifiez la réponse
-        if response.status_code == 200:
-            print('Requête réussie')
-            print('Réponse:', response.json())
-        else:
-            print('Erreur:', response.status_code)
-            print('Message:', response.text)
+
+response = await asyncio.to_thread(post_request, url, data, headers)
+
+# Vérifiez la réponse
+if response.status_code == 200:
+    print('Requête réussie')
+    print('Réponse:', response.json())
+else:
+    print('Erreur:', response.status_code)
+    print('Message:', response.text)
 
 # Exécuter la fonction asynchrone
-asyncio.run(post_request())
+# asyncio.run(post_request())
 
 # Fonction pour filtrer les points d'intérêt dans un rayon donné autour d'une position
 def filter_pois(position, pois, radius_km):
@@ -62,6 +64,7 @@ def filter_pois(position, pois, radius_km):
         else:
             print("Coordonnées incorrectes")
     return list_pois
+
 
 # Connexion à la base de données PostgreSQL
 conn = psycopg2.connect(
@@ -107,6 +110,7 @@ username = "neo4j"
 password = "od1235Azerty%"
 driver = GraphDatabase.driver(uri, auth=(username, password))
 
+
 # Fonction pour créer les clusters et les POIs dans Neo4j
 def create_graph(tx):
     # Supprimer tous les nœuds et relations existants dans la base Neo4j
@@ -131,6 +135,7 @@ def create_graph(tx):
             label_fr=label_fr, cluster_name=cluster_name
         )
 
+
 # Création de la session Neo4j et exécution de la transaction
 with driver.session() as session:
     session.write_transaction(create_graph)
@@ -138,8 +143,6 @@ with driver.session() as session:
 # Fermeture du curseur et de la connexion à la base de données PostgreSQL
 cursor.close()
 conn.close()
-
-
 
 # Exécuter le script AfficherCarte.py pour afficher les résultats
 subprocess.run(["python3", "AfficherCarte.py"])
