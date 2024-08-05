@@ -5,7 +5,10 @@ import folium
 from geopy.distance import geodesic
 import subprocess
 import asyncio
+import nest_asyncio
 
+# Appliquer nest_asyncio pour permettre l'utilisation d'asyncio.run dans un environnement avec une boucle d'événements existante
+nest_asyncio.apply()
 
 # Fonction synchrone pour effectuer une requête POST
 def post_request(url, data, headers=None):
@@ -275,16 +278,5 @@ async def main():
             st.error("Erreur lors de la récupération de l'itinéraire.")
 
 
-# Fonction pour gérer l'exécution asynchrone dans Streamlit
-def run_asyncio_task():
-    try:
-        loop = asyncio.get_running_loop()
-    except RuntimeError:  # Il n'y a pas de boucle d'événements active
-        loop = asyncio.new_event_loop()
-        asyncio.set_event_loop(loop)
-    task = loop.run_until_complete(main())
-    return task
-
-
 if __name__ == "__main__":
-    run_asyncio_task()
+    asyncio.run(main())
