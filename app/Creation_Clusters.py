@@ -17,6 +17,8 @@ parser.add_argument('--radius', type=float, required=True, help='Rayon en kilom�
 args = parser.parse_args()
 
 
+
+
 # Exécuter la fonction asynchrone
 # asyncio.run(post_request())
 
@@ -72,24 +74,11 @@ kmeans = KMeans(n_clusters=10, n_init=10)
 kmeans.fit(X)
 clusters = kmeans.labels_
 
-
-def post_request(urla, dataa, headersa=None):
-    responsex = requests.post(urla, json=dataa, headers=headersa)
-    return responsex.json()
-
-
-# Fonction asynchrone pour exécuter la requête POST dans un thread séparé
-async def async_post_request(urlb, datab, headersb=None):
-    responsex = await asyncio.to_thread(requests.post, urlb, json=datab, headers=headersb)
-    return responsex
-
-
 # Connexion à la base de données Neo4j
 uri = "bolt://188.166.105.53:7687"
 username = "neo4j"
 password = "od1235Azerty%"
 driver = GraphDatabase.driver(uri, auth=(username, password))
-
 
 # Fonction pour créer les clusters et les POIs dans Neo4j
 def create_graph(tx):
@@ -115,29 +104,6 @@ def create_graph(tx):
             label_fr=label_fr, cluster_name=cluster_name
         )
 
-
-# ########################
-# URL de l'API
-url = 'http://64.226.69.58:8080/data/graph'
-
-# Données à envoyer dans la requête POST
-data = {
-    'latitude': args.latitude,
-    'longitude': args.longitude,
-    'poi_types': args.poi_types,
-    'radius': args.radius
-}
-
-# En-têtes de la requête (optionnels)
-headers = {
-    'Content-Type': 'application/json',
-    'Authorization': 'Bearer your_token'
-}
-
-response = asyncio.run(async_post_request(url, data, headers))
-print("Réponse de l'API:", response)
-# ###############################
-
 # Création de la session Neo4j et exécution de la transaction
 with driver.session() as session:
     session.write_transaction(create_graph)
@@ -145,6 +111,9 @@ with driver.session() as session:
 # Fermeture du curseur et de la connexion à la base de données PostgreSQL
 cursor.close()
 conn.close()
+
+
+
 
 # Exécuter le script AfficherCarte.py pour afficher les résultats
 subprocess.run(["python3", "AfficherCarte.py"])

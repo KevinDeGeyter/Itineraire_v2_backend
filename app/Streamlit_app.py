@@ -7,6 +7,18 @@ import subprocess
 import asyncio
 
 
+# Fonction synchrone pour effectuer une requête POST
+def post_request(url, data, headers=None):
+    response = requests.post(url, json=data, headers=headers)
+    return response.json()
+
+
+# Fonction asynchrone pour exécuter la requête POST dans un thread séparé
+async def async_post_request(url, data, headers=None):
+    response = await asyncio.to_thread(post_request, url, data, headers)
+    return response
+
+
 # Fonction pour appeler l'API OpenRouteService
 def call_openrouteservice(coordinates, profile):
     url = f'https://api.openrouteservice.org/v2/directions/{profile}/geojson'
@@ -72,6 +84,22 @@ async def geocode(address):
 
 
 # Fonction pour exécuter la requête et récupérer les résultats
+def execute_query_async(latitude, longitude, poi_types, radius):
+    poi_types_str = " ".join(poi_types)
+    command = f"python3 Creation_Clusters.py --latitude {latitude} --longitude {longitude} --poi_types {poi_types_str} --radius {radius}"
+
+    with st.spinner('Fetching data... Please wait.'):
+        process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        stdout, stderr = process.communicate()
+
+    if process.returncode == 0:
+        st.success('Done!')
+        return True
+    else:
+        st.success('Error')
+        return False, stderr.decode('utf-8')
+
+
 def execute_query(latitude, longitude, poi_types, radius):
     poi_types_str = " ".join(poi_types)
     command = f"python3 Creation_Clusters.py --latitude {latitude} --longitude {longitude} --poi_types {poi_types_str} --radius {radius}"
@@ -89,7 +117,7 @@ def execute_query(latitude, longitude, poi_types, radius):
 
 
 # Fonction principale de l'application Streamlit
-def main():
+async def main():
     st.title("Projet Itineraire Data Engineer")
 
     st.header("Paramètres de la requête")
@@ -122,10 +150,29 @@ def main():
 
     poi_types = st.multiselect("Types de points d'intérêt :", extended_poi_types, default=default_poi_types)
 
+    # ########################
+    # URL de l'API
+    url = 'http://64.226.69.58:8080/data/graph'
+
+    # Données à envoyer dans la requête POST
+    data = {
+        'latitude': latitude,
+        'longitude': longitude,
+        'poi_types': poi_types,
+        'radius': radius
+    }
+
+    # En-têtes de la requête (optionnels)
+    headers = {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer your_token'
+    }
+
     # Bouton pour exécuter la requête
     if st.button("Exécuter la requête"):
         if coordinates:
-            result = execute_query(latitude, longitude, poi_types, radius)
+            # result = execute_query(latitude, longitude, poi_types, radius)
+            result = await async_post_request(url, data, headers)
 
             if result == True:
                 st.success("La requête a été exécutée avec succès !")
@@ -229,4 +276,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    asyncio.run(main())
