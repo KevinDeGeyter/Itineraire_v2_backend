@@ -95,7 +95,7 @@ def post_request(url, data, headers=None):
 
 # Fonction asynchrone pour exécuter la requête POST dans un thread séparé
 async def async_post_request(url, data, headers=None):
-    response = await asyncio.to_thread(post_request, url, data, headers)
+    response = await asyncio.to_thread(requests.post, url, json=data, headers=headers)
     return response
 
 
@@ -135,7 +135,7 @@ async def main():
 
     # ########################
     # URL de l'API
-    url = 'http://64.226.69.58:8080/data/graphe'
+    url = 'http://64.226.69.58:8080/data/graph'
 
     # Données à envoyer dans la requête POST
     data = {
@@ -153,14 +153,6 @@ async def main():
 
     response = asyncio.run(async_post_request(url, data, headers))
     print("Réponse de l'API:", response)
-
-    # Vérifiez la réponse
-    if response.status_code == 200:
-        print('Requête réussie')
-        print('Réponse:', response.json())
-    else:
-        print('Erreur:', response.status_code)
-        print('Message:', response.text)
     # ###############################
 
     # Bouton pour exécuter la requête

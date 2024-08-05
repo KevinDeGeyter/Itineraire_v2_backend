@@ -16,7 +16,7 @@ async def hello():
     return {"data": "Hello Data Tourisme"}
 
 
-@routerDataTourisme.post("/graphe", response_description="Data Tourisme")
+@routerDataTourisme.post("/graph", response_description="Data Tourisme")
 async def create_graph(data: dict = Body(...)):
     await asyncio.sleep(30)
     return {
