@@ -277,14 +277,13 @@ async def main():
 
 # Fonction pour gérer l'exécution asynchrone dans Streamlit
 def run_asyncio_task():
-    loop = asyncio.get_event_loop()
-    if loop.is_running():
-        # Si la boucle est déjà en cours d'exécution, utilisez create_task
-        task = loop.create_task(main())
-        loop.run_until_complete(task)
-        return task.result()
-    else:
-        return asyncio.run(main())
+    try:
+        loop = asyncio.get_running_loop()
+    except RuntimeError:  # Il n'y a pas de boucle d'événements active
+        loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop)
+    task = loop.run_until_complete(main())
+    return task
 
 
 if __name__ == "__main__":
