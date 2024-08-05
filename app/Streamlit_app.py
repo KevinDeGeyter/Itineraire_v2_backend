@@ -133,27 +133,6 @@ async def main():
 
     poi_types = st.multiselect("Types de points d'intérêt :", extended_poi_types, default=default_poi_types)
 
-    # ########################
-    # URL de l'API
-    url = 'http://64.226.69.58:8080/data/graph'
-
-    # Données à envoyer dans la requête POST
-    data = {
-        'latitude': latitude,
-        'longitude': longitude,
-        'poi_types': poi_types,
-        'radius': radius
-    }
-
-    # En-têtes de la requête (optionnels)
-    headers = {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer your_token'
-    }
-
-    response = asyncio.run(async_post_request(url, data, headers))
-    print("Réponse de l'API:", response)
-    # ###############################
 
     # Bouton pour exécuter la requête
     if st.button("Exécuter la requête"):
